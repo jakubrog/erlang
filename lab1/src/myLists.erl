@@ -10,7 +10,7 @@
 -author("jakubrog").
 
 %% API
--export([contains/2, duplicateElements/1, sumFloats/1, sum/1]).
+-export([contains/2, duplicateElements/1, sumFloats/1, sum/1, calculate/2]).
 
 % zad 4
 contains([H|_] , H) -> true;
@@ -34,3 +34,16 @@ sumFloatsTail([], A) -> A;
 sumFloatsTail([X | T], A) when is_float(X) -> sumFloatsTail(T, A + X);
 sumFloatsTail([_|T],A)-> sumFloatsTail(T, A).
 
+
+
+calculate([], Stack) -> Stack;
+calculate([Num|Rest], Stack) when is_number(Num) ->
+  calculate(Rest, [Num | Stack]);
+calculate(["+" | Rest], [A | [B | Stack]]) when is_number(A) andalso is_number(B) ->
+  calculate(Rest, [B+A | Stack]);
+calculate(["-" | Rest], [A | [B | Stack]]) when is_number(A) andalso is_number(B) ->
+  calculate(Rest, [B-A | Stack]);
+calculate(["/" | Rest], [A | [B | Stack]]) when is_number(A) andalso is_number(B) ->
+  calculate(Rest, [B/A | Stack]);
+calculate(["*" | Rest], [A | [B | Stack]]) when is_number(A) andalso is_number(B) ->
+  calculate(Rest, [B*A | Stack]).
