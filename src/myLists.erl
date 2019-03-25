@@ -10,7 +10,7 @@
 -author("jakubrog").
 
 %% API
--export([contains/2, duplicateElements/1, sumFloats/1, sum/1, calculate/2]).
+-export([contains/2, duplicateElements/1, sumFloats/1, sum/1, rpn_calculator/1]).
 
 % zad 4
 contains([H|_] , H) -> true;
@@ -35,6 +35,8 @@ sumFloatsTail([X | T], A) when is_float(X) -> sumFloatsTail(T, A + X);
 sumFloatsTail([_|T],A)-> sumFloatsTail(T, A).
 
 
+rpn_calculator(A) ->
+  calculate(A, []).
 
 calculate([], Stack) -> Stack;
 calculate([Num|Rest], Stack) when is_number(Num) ->
@@ -46,4 +48,20 @@ calculate(["-" | Rest], [A | [B | Stack]]) when is_number(A) andalso is_number(B
 calculate(["/" | Rest], [A | [B | Stack]]) when is_number(A) andalso is_number(B) ->
   calculate(Rest, [B/A | Stack]);
 calculate(["*" | Rest], [A | [B | Stack]]) when is_number(A) andalso is_number(B) ->
-  calculate(Rest, [B*A | Stack]).
+  calculate(Rest, [B*A | Stack]);
+calculate(["sqrt" | Rest], [A | Stack]) when is_number(A) andalso A >= 0 ->
+  calculate(Rest, [math:sqrt(A) | Stack]);
+calculate(["sin" | Rest], [A | Stack]) when is_number(A) ->
+  calculate(Rest, [math:sin(A) | Stack]);
+calculate(["cos" | Rest], [A | Stack]) when is_number(A) ->
+  calculate(Rest, [math:cos(A) | Stack]);
+calculate(["tan" | Rest], [A | Stack]) when is_number(A) ->
+  calculate(Rest, [math:tan(A) | Stack]);
+calculate(["pow" | Rest], [A | [B | Stack]]) when is_number(A) andalso is_number(B) ->
+  calculate(Rest, [math:pow(A,B)| Stack]);
+calculate(_, _) ->
+  io:format("error ").
+
+
+
+
