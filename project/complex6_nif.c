@@ -1,4 +1,6 @@
 #include <erl_nif.h>
+#include <stdio.h>
+
 
 extern int foo(int x);
 extern int bar(int y);
@@ -10,6 +12,7 @@ static ERL_NIF_TERM foo_nif(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 	return enif_make_badarg(env);
     }
     ret = foo(x);
+    printf("Hello\n" );
     return enif_make_int(env, ret);
 }
 
